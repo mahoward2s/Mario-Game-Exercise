@@ -47,10 +47,10 @@ scene("game", () => {
         '%': [sprite('surprise'), solid(), 'coinSurprise'],
         '*': [sprite('surprise'), solid(), 'mushroomSurprise'],
         '}': [sprite('unboxed'), solid()],
-        '(': [sprite('pipeBottomLeft'), solid()],
-        ')': [sprite('pipeBottomRight'), solid()],
-        '-': [sprite('pipeTopLeft'), solid()],
-        '+': [sprite('pipeTopRight'), solid()],
+        '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
+        ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
+        '-': [sprite('pipeTopLeft'), solid(), scale(0.5)],
+        '+': [sprite('pipeTopRight'), solid(), scale(0.5)],
     }
 
     const gameLevel = addLevel(map, levelCfg)

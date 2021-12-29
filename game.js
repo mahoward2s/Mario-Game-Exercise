@@ -108,6 +108,13 @@ scene("game", () => {
         origin('bot')
     ])
 
+    player.on("headbump", (obj) => {
+        if (obj.is('coinSurprise')) {
+            gameLevel.spawn('$', obj.gridPos.sub(0,1))
+            destroy(obj)
+        }
+    })
+
     keyDown('left', () => {
         player.move(-MOVE_SPEED, 0)
     })

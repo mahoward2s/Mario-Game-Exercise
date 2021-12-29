@@ -51,9 +51,18 @@ scene("game", () => {
         ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
         '-': [sprite('pipeTopLeft'), solid(), scale(0.5)],
         '+': [sprite('pipeTopRight'), solid(), scale(0.5)],
+        '^': [sprite('goomba'), solid()],
+        '#': [sprite('goomba'), solid()],
     }
 
     const gameLevel = addLevel(map, levelCfg)
+
+    const player = add([
+        sprite('mario'), solid(),
+        pos(30, 0),
+        body(),
+        origin('bot')
+    ])
 
 })
 

@@ -14,9 +14,13 @@ loadSprite('brick', 'pogC9x5')
 loadSprite('block', 'bdrLpi6')
 loadSprite('mario', 'Wb1qfhK')
 loadSprite('fireFlower', 'uaUm9sN')
-loadSprite('growMushroom', '0wMd92p')
-loadSprite('tunnel', 'rl3cTER')
-
+loadSprite('mushroom', '0wMd92p')
+loadSprite('suprise', 'gesQ1KP')
+loadSprite('unboxed', 'bdrLpi6')
+loadSprite('pipeTopLeft', 'ReTPiWY')
+loadSprite('pipeTopRight', 'hj2GK4n')
+loadSprite('pipeBottomLeft', 'c1cYSbt')
+loadSprite('pipeBottomRight', 'nqQ79eI')
 
 screen("game", () => {
     layers(['bg', 'obj', 'ui'], 'obj')

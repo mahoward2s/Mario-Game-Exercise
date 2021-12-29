@@ -9,8 +9,9 @@ kaboom({
 const MOVE_SPEED = 120
 const JUMP_FORCE = 360
 const BIG_JUMP_FORCE = 550
+const FALL_DEATH = 400
 let CURRENT_JUMP_FORCE = JUMP_FORCE
-
+let isJumping = true
 
 
 loadRoot('https://i.imgur.com/')
@@ -114,20 +115,20 @@ scene("game", ({ score }) => {
     ])
 
 
- action('mushroom', (m) => {
-    m.move(40, 0)
- })
+    action('mushroom', (m) => {
+        m.move(40, 0)
+    })
 
     player.on("headbump", (obj) => {
         if (obj.is('coinSurprise')) {
-            gameLevel.spawn('$', obj.gridPos.sub(0,1))
+            gameLevel.spawn('$', obj.gridPos.sub(0, 1))
             destroy(obj)
-            gameLevel.spawn('}', obj.gridPos.sub(0,0))
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
         if (obj.is('mushroomSurprise')) {
-            gameLevel.spawn('#', obj.gridPos.sub(0,1))
+            gameLevel.spawn('#', obj.gridPos.sub(0, 1))
             destroy(obj)
-            gameLevel.spawn('}', obj.gridPos.sub(0,0))
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
     })
 
@@ -148,25 +149,45 @@ scene("game", ({ score }) => {
         d.move(-ENEMY_SPEED, 0)
     })
 
-    player.collides ('dangerous', (d) => {
-        go('lose', { score: scoreLabel.value})
+    player.collides('dangerous', (d) => {
+        if (isJumping) {
+            destroy(d)
+        } else {
+            go('lose', { score: scoreLabel.value })
+        }
+    })
+
+    player.action(() => {
+        camPos(player.pos)
+        if (player.pos.y >= FALL_DEATH) {
+            go('lose', { score: scoreLabel.value })
+        }
     })
 
     keyDown('left', () => {
         player.move(-MOVE_SPEED, 0)
     })
+
     keyDown('right', () => {
         player.move(MOVE_SPEED, 0)
     })
+
+    player.action(() => {
+        if (player.grounded()) {
+            isJumping = false
+        }
+    })
+
     keyPress('space', () => {
         if (player.grounded()) {
+            isJumping = true
             player.jump(CURRENT_JUMP_FORCE)
         }
     })
 })
 
-scene('lose', ({score}) => {
-    add([text(score, 32), origin('center'), pos(width()/2, height()/2)])
+scene('lose', ({ score }) => {
+    add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
 })
 
 start("game", ({ score: 0 }))

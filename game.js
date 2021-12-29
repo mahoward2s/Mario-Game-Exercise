@@ -30,20 +30,41 @@ loadSprite('pipeTopRight', 'hj2GK4n.png')
 loadSprite('pipeBottomLeft', 'c1cYSbt.png')
 loadSprite('pipeBottomRight', 'nqQ79eI.png')
 
-scene("game", ({ level,  score }) => {
+loadSprite('blueBlock', 'fVscIbn.png')
+loadSprite('blueBrick', '3e5YRQd.png')
+loadSprite('blueSteel', 'gqVoI2b.png')
+loadSprite('blueGoomba', 'SvV4ueD.png')
+loadSprite('blueSurprise', 'RMqCc1G.png')
+
+
+scene("game", ({ level, score }) => {
     layers(['bg', 'obj', 'ui'], 'obj')
 
-    const map = [
-        '                                      ',
-        '                                      ',
-        '                                      ',
-        '                                      ',
-        '                                      ',
-        '      %   =*=%=                       ',
-        '                                      ',
-        '                            -+        ',
-        '                     ^  ^   ()        ',
-        '==============================   =====',
+    const maps = [
+        [
+            '                                      ',
+            '                                      ',
+            '                                      ',
+            '                                      ',
+            '                                      ',
+            '      %   =*=%=                       ',
+            '                                      ',
+            '                            -+        ',
+            '                     ^  ^   ()        ',
+            '==============================   =====',
+        ],
+        [
+            '&                                      &',
+            '&                                      &',
+            '&                                      &',
+            '&                                      &',
+            '&                                      &',
+            '&         @@@@@@               x x     &',
+            '&                            x x x     &',
+            '&     x                    x x x x   -+&',
+            '&     x        z       z x x x x x   ()&',
+            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+        ],
     ]
 
     const levelCfg = {
@@ -54,15 +75,20 @@ scene("game", ({ level,  score }) => {
         '%': [sprite('surprise'), solid(), 'coinSurprise'],
         '*': [sprite('surprise'), solid(), 'mushroomSurprise'],
         '}': [sprite('unboxed'), solid()],
-        '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
-        ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
+        '(': [sprite('pipeBottomLeft'), solid(), scale(0.5), 'pipe'],
+        ')': [sprite('pipeBottomRight'), solid(), scale(0.5), 'pipe'],
         '-': [sprite('pipeTopLeft'), solid(), scale(0.5)],
         '+': [sprite('pipeTopRight'), solid(), scale(0.5)],
         '^': [sprite('goomba'), solid(), 'dangerous'],
         '#': [sprite('mushroom'), solid(), 'mushroom', body()],
+        '!': [sprite('blueBlock'), solid(), scale(0.5)],
+        '&': [sprite('blueBrick'), solid(), scale(0.5)],
+        'x': [sprite('blueSteel'), solid(), scale(0.5)],
+        'z': [sprite('blueGoomba'), solid(), scale(0.5), 'dangerous'],
+        '@': [sprite('blueSurprise'), solid(), scale(0.5), 'coinSurprise'],
     }
 
-    const gameLevel = addLevel(map, levelCfg)
+    const gameLevel = addLevel(maps[level], levelCfg)
 
     const scoreLabel = add([
         text(score),
@@ -74,7 +100,7 @@ scene("game", ({ level,  score }) => {
     ])
 
     add([
-        text('level' + 'test', pos(4, 6))])
+        text('level ' + parseInt(level + 1)), pos(40, 6)])
 
     function big() {
         let timer = 0
@@ -164,14 +190,14 @@ scene("game", ({ level,  score }) => {
         }
     })
 
-player.collides('pipe', () => {
-    keyPress('down', () => {
-        go('game', {
-            level: (level +1),
-            score: scoreLabel.value
+    player.collides('pipe', () => {
+        keyPress('down', () => {
+            go('game', {
+                level: (level + 1) % maps.length,
+                score: scoreLabel.value
+            })
         })
     })
-})
 
 
     keyDown('left', () => {
